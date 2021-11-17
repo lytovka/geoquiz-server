@@ -37,6 +37,7 @@ const CountrySchema = new mongoose.Schema({
     description: String,
     wikiLink: String,
   },
+  flag: String,
 });
 
 const Countries = mongoose.model('Countries', CountrySchema);
