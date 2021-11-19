@@ -30,6 +30,19 @@ app.get('/read/:country_key', async (req, res) => {
     });
 });
 
+app.get('/countries', async (req, res) => {
+  let query = {};
+  Countries.find(query)
+    .select('country_key flag data.name')
+    .lean()
+    .exec(function (err, docs) {
+      if (err) {
+        res.send(err);
+      }
+      res.send(docs);
+    });
+});
+
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
 });
