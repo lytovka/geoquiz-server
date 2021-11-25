@@ -49,24 +49,6 @@ app.get('/countries', async (req, res) => {
     });
 });
 
-app.get('/countries/:page_number', async (req, res) => {
-  const limit = PAGE_SIZE;
-  const skip = parseInt(req.params.page_number) * PAGE_SIZE;
-  let query = {};
-  console.log('requested page number ', req.params.page_number);
-
-  Countries.find(query)
-    .select('country_key flag data.name')
-    .skip(skip)
-    .limit(limit)
-    .lean()
-    .exec(function (err, docs) {
-      if (err) {
-        res.send(err);
-      }
-      res.send(docs);
-    });
-});
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
