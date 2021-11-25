@@ -49,6 +49,38 @@ app.get('/countries', async (req, res) => {
     });
 });
 
+app.get('/countries_by_category/:data_category/:data_value', async (req, res) => {
+  const country_key = req.body;
+  let query = {};
+  query[`data.${req.params.data_category}`] = req.params.data_value
+  console.log('requested to see all countries belonging to : ', req.params.data_category, 'with value of', req.params.data_value);
+  console.log(query)
+  Countries.find(query)
+    .select('country_key data.name data.flag')
+    .lean()
+    .exec(function (err, docs) {
+      if (err) {
+        res.send(err);
+      }
+      res.send(docs);
+    });
+});
+
+app.get('/distinct_data_categories/:data_category', async (req, res) => {
+  const country_key = req.body;
+  let query = {};
+  console.log('requested to see: ', req.params.data_category);
+
+  Countries.find(query)
+    .distinct(`data.${req.params.data_category}`)
+    .lean()
+    .exec(function (err, docs) {
+      if (err) {
+        res.send(err);
+      }
+      res.send(docs);
+    });
+});
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
