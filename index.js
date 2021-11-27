@@ -99,6 +99,22 @@ app.get('/countries_by_subregion/:subregion/', async (req, res) => {
     });
 });
 
+app.get('/countries_by_region/:region/', async (req, res) => {
+  const country_key = req.body;
+  let query = {};
+  query['data.region'] = req.params.region
+  console.log('requested to see all countries belonging to subregion: ', req.params.region);
+  Countries.find(query)
+    .select('country_key data.name data.flag')
+    .lean()
+    .exec(function (err, docs) {
+      if (err) {
+        res.send(err);
+      }
+      res.send(docs);
+    });
+});
+
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
