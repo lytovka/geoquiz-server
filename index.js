@@ -75,13 +75,25 @@ async function getFilteredCountriesByQuery(query, res, selectAttr = 'country_key
 }
 
 app.post('/write/user_score/', (req, res) => {
-  console.log(req.body);
+  console.log('Requested to add score to database', req.body);
   Score.insertMany([req.body])
   res.status(201).send({ response: 'added data to the table' });
 });
 
+app.get('/scores_by_quiz_type/:difficulty/:region/:type', async (req, res) => {
+  const query = { quizConfig: { levelOfDifficulty: req.params.difficulty, region: req.params.region, type: req.params.type } }
+  Score.find(query)
+    .select('-_id username quizScore')
+    .lean()
+    .exec(function (err, docs) {
+      if (err) {
+        res.send(err);
+      }
+      res.send(docs);
+    });
+});
+
 app.get('/read/:country_key', async (req, res) => {
-  const country_key = req.body;
   let query = { country_key: req.params.country_key };
   console.log('requested to see: ', req.params.country_key);
 
@@ -96,7 +108,6 @@ app.get('/read/:country_key', async (req, res) => {
 });
 
 app.get('/distinct_data_categories/:data_category', async (req, res) => {
-  const country_key = req.body;
   let query = {};
   let finalQuery = null;
   console.log('requested to see: ', req.params.data_category);
@@ -122,7 +133,6 @@ app.get('/countries', async (req, res) => {
 });
 
 app.get('/countries_by_category/:data_category/:data_value', async (req, res) => {
-  const country_key = req.body;
   let query = {};
   query[`data.${req.params.data_category}`] = req.params.data_value
   console.log('requested to see all countries belonging to : ', req.params.data_category, 'with value of', req.params.data_value);
