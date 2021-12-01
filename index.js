@@ -6,6 +6,7 @@ const path = require('path');
 
 const Countries = require('./models/Country');
 const Blacklist = require('./models/Blacklist');
+const Score = require('./models/Score');
 const PAGE_SIZE = 48;
 
 app.use(express.json());
@@ -72,6 +73,12 @@ async function getFilteredCountriesByQuery(query, res, selectAttr = 'country_key
       });
   });
 }
+
+app.post('/write/user_score/', (req, res) => {
+  console.log(req.body);
+  Score.insertMany([req.body])
+  res.status(201).send({ response: 'added data to the table' });
+});
 
 app.get('/read/:country_key', async (req, res) => {
   const country_key = req.body;
