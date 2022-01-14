@@ -11,7 +11,8 @@ const PAGE_SIZE = 48;
 
 app.use(express.json());
 app.use(cors());
-app.use('/public', express.static('public'));
+app.use(express.static('public'));
+app.use('/public', express.static(process.cwd() + '/public'));
 
 let blacklist = null;
 let isBlacklistSet = false;
