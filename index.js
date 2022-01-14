@@ -11,10 +11,9 @@ const PAGE_SIZE = 48;
 
 app.use(express.json());
 app.use(cors());
-app.use('/flags', express.static('images'))
 
-blacklist = null;
-isBlacklistSet = false;
+let blacklist = null;
+let isBlacklistSet = false;
 
 mongoose.connect(
   'mongodb+srv://dbUser:a6qsxUg6akKH8XzE@cluster0.6ngci.mongodb.net/countries?retryWrites=true&w=majority',
