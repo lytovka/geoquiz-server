@@ -141,6 +141,10 @@ app.get('/countries_by_category/:data_category/:data_value', async (req, res) =>
   getFilteredCountriesByQuery(query, res, 'country_key data.name data.flag');
 });
 
+app.get("/public/:type/:country", (req, res) => {
+  app.serveStatic(req, res, path.resolve(`./public/${req.params.type}/${req.params.country}`));
+});
+
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
 });
